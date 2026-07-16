@@ -1,0 +1,31 @@
+name: dem_sbm
+description: "DEM Smart Building Monitor - Mission Control IoT Dashboard"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+  firebase_auth: ^5.3.1
+
+  # UI / UX
+  google_fonts: ^6.2.1
+  lucide_icons: ^0.257.0
+  fl_chart: ^0.69.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
