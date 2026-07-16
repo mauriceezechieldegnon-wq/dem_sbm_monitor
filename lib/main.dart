@@ -24,7 +24,8 @@ import 'screens/alerts_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/team_screen.dart';
 import 'screens/access_denied_screen.dart';
-import 'screens/splash_screen.dart'; // <--- AJOUT DE L'IMPORT DU SPLASH
+import 'screens/splash_screen.dart';
+import 'services/simulator_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -112,6 +113,9 @@ class AuthGate extends StatelessWidget {
     );
     // S'assurer que le bâtiment a un document de télémétrie
     DatabaseService.instance.ensureDocumentExists();
+
+    // DÉMARRAGE DU SIMULATEUR IOT
+    SimulatorService.startSimulation();
   }
 }
 
