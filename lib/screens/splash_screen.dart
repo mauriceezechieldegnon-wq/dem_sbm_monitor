@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       AppTheme.displayFont(fontSize: 28, color: AppColors.cyan),
                 ),
                 Text(
-                  "Mission Control v4.2",
+                  "DEM Smart Building Monitor",
                   style: AppTheme.monoFont(
                       fontSize: 12, color: AppColors.textSecondary),
                 ),
