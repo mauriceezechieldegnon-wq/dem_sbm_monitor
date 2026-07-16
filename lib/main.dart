@@ -24,6 +24,7 @@ import 'screens/alerts_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/team_screen.dart';
 import 'screens/access_denied_screen.dart';
+import 'screens/splash_screen.dart'; // <--- AJOUT DE L'IMPORT DU SPLASH
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +48,9 @@ class DemSbmApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DEM SBM Mission Control',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // <--- MIS SUR FALSE POUR LE LOOK PRO
       theme: AppTheme.darkTheme,
-      home: const AuthGate(),
+      home: const SplashScreen(), // <--- DÉMARRAGE SUR LE SPLASH SCREEN
     );
   }
 }
@@ -157,6 +158,7 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
 
               return Stack(
                 children: [
+                  // Fond avec halos lumineux diffus
                   _buildBackgroundGlows(alertMode),
                   SafeArea(
                     child: Column(
