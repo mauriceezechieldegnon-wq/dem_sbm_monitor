@@ -16,8 +16,14 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.22.2' # <--- VERSION FIGÉE ICI
+      
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Build APK
         run: flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -31,10 +37,17 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.22.2' # <--- VERSION FIGÉE ICI
+      
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Enable Windows Build
+        run: flutter config --enable-windows-desktop
+
       - name: Build Windows
-        run: |
-          flutter config --enable-windows-desktop
-          flutter build windows --release
+        run: flutter build windows --release
+
       - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
