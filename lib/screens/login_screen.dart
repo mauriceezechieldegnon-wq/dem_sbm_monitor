@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 
 import '../core/theme.dart';
 import '../services/auth_service.dart';
@@ -150,8 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.cyan.withOpacity(0.4)),
           ),
-          child:
-              const Icon(LucideIcons.building, color: AppColors.cyan, size: 30),
+          child: Icon(LucideIcons.building, color: AppColors.cyan, size: 30),
         ),
         const SizedBox(height: 18),
         Text('DEM SBM', style: AppTheme.displayFont(fontSize: 26)),
@@ -232,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(LucideIcons.alertTriangle,
+                        Icon(LucideIcons.alertTriangle,
                             color: AppColors.danger, size: 16),
                         const SizedBox(width: 8),
                         Expanded(

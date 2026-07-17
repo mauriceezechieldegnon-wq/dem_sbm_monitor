@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 import '../core/theme.dart';
 import '../services/team_service.dart';
 
@@ -36,7 +36,7 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
                 // Dans la partie _buildInviteSection de ton team_screen.dart :
                 IconButton(
-                  icon: const Icon(LucideIcons.userPlus, color: AppColors.cyan),
+                  icon: Icon(LucideIcons.userPlus, color: AppColors.cyan),
                   onPressed: () {
                     final email = _emailController.text.trim();
                     if (email.isNotEmpty && email.contains('@')) {

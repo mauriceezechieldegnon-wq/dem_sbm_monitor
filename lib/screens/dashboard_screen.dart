@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 
 import '../core/theme.dart';
 import '../models/telemetry.dart';
@@ -60,11 +60,15 @@ class _DashboardScreenState extends State<DashboardScreen>
           const SizedBox(height: 24),
           _buildEnergyCard(data),
           const SizedBox(height: 24),
-          Text('CAPTEURS', style: AppTheme.monoFont(fontSize: 12, color: AppColors.textSecondary)),
+          Text('CAPTEURS',
+              style: AppTheme.monoFont(
+                  fontSize: 12, color: AppColors.textSecondary)),
           const SizedBox(height: 12),
           _buildSensorGrid(data),
           const SizedBox(height: 24),
-          Text('CONTRÔLES', style: AppTheme.monoFont(fontSize: 12, color: AppColors.textSecondary)),
+          Text('CONTRÔLES',
+              style: AppTheme.monoFont(
+                  fontSize: 12, color: AppColors.textSecondary)),
           const SizedBox(height: 12),
           if (!widget.tier.canControlIot) _buildUpgradeBanner(),
           if (!widget.tier.canControlIot) const SizedBox(height: 12),
@@ -87,26 +91,35 @@ class _DashboardScreenState extends State<DashboardScreen>
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () => AuthService.instance.signOut(),
-                  child: Icon(LucideIcons.logOut, color: AppColors.textSecondary, size: 18),
+                  child: Icon(LucideIcons.logOut,
+                      color: AppColors.textSecondary, size: 18),
                 ),
               ],
             ),
             const SizedBox(height: 4),
             Text(
               'Smart Building Monitor',
-              style: AppTheme.bodyFont(fontSize: 13, color: AppColors.textSecondary),
+              style: AppTheme.bodyFont(
+                  fontSize: 13, color: AppColors.textSecondary),
             ),
           ],
         ),
         FadeTransition(
-          opacity: Tween<double>(begin: 0.4, end: 1.0).animate(_liveBlinkController),
+          opacity:
+              Tween<double>(begin: 0.4, end: 1.0).animate(_liveBlinkController),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: (widget.alertMode ? AppColors.dangerBright : AppColors.success).withOpacity(0.12),
+              color: (widget.alertMode
+                      ? AppColors.dangerBright
+                      : AppColors.success)
+                  .withOpacity(0.12),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: (widget.alertMode ? AppColors.dangerBright : AppColors.success).withOpacity(0.4),
+                color: (widget.alertMode
+                        ? AppColors.dangerBright
+                        : AppColors.success)
+                    .withOpacity(0.4),
               ),
             ),
             child: Row(
@@ -117,7 +130,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                   height: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.alertMode ? AppColors.dangerBright : AppColors.success,
+                    color: widget.alertMode
+                        ? AppColors.dangerBright
+                        : AppColors.success,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -125,7 +140,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                   widget.connected ? 'LIVE DATA' : 'CONNEXION...',
                   style: AppTheme.monoFont(
                     fontSize: 11,
-                    color: widget.alertMode ? AppColors.dangerBright : AppColors.success,
+                    color: widget.alertMode
+                        ? AppColors.dangerBright
+                        : AppColors.success,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -152,7 +169,9 @@ class _DashboardScreenState extends State<DashboardScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('CONSOMMATION ÉNERGIE', style: AppTheme.monoFont(fontSize: 12, color: AppColors.textSecondary)),
+                  Text('CONSOMMATION ÉNERGIE',
+                      style: AppTheme.monoFont(
+                          fontSize: 12, color: AppColors.textSecondary)),
                   Icon(LucideIcons.zap, color: AppColors.cyan, size: 20),
                 ],
               ),
@@ -161,9 +180,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  Text(data.energy.toStringAsFixed(1), style: AppTheme.displayFont(fontSize: 42, color: AppColors.cyan)),
+                  Text(data.energy.toStringAsFixed(1),
+                      style: AppTheme.displayFont(
+                          fontSize: 42, color: AppColors.cyan)),
                   const SizedBox(width: 6),
-                  Text('kWh', style: AppTheme.bodyFont(fontSize: 16, color: AppColors.textSecondary)),
+                  Text('kWh',
+                      style: AppTheme.bodyFont(
+                          fontSize: 16, color: AppColors.textSecondary)),
                 ],
               ),
               const SizedBox(height: 14),
@@ -179,7 +202,8 @@ class _DashboardScreenState extends State<DashboardScreen>
               const SizedBox(height: 8),
               Text(
                 'Charge contrôleur (CPU) : ${data.cpu.toStringAsFixed(0)}%',
-                style: AppTheme.bodyFont(fontSize: 12, color: AppColors.textSecondary),
+                style: AppTheme.bodyFont(
+                    fontSize: 12, color: AppColors.textSecondary),
               ),
             ],
           ),
@@ -241,12 +265,13 @@ class _DashboardScreenState extends State<DashboardScreen>
           ),
           child: Row(
             children: [
-              const Icon(LucideIcons.lock, color: AppColors.warning, size: 16),
+              Icon(LucideIcons.lock, color: AppColors.warning, size: 16),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Pilotage verrouillé — passe au palier Pro pour activer Éclairage/HVAC.',
-                  style: AppTheme.bodyFont(fontSize: 12, color: AppColors.warning),
+                  style:
+                      AppTheme.bodyFont(fontSize: 12, color: AppColors.warning),
                 ),
               ),
             ],
@@ -266,7 +291,8 @@ class _DashboardScreenState extends State<DashboardScreen>
             label: 'Éclairage',
             active: data.lightsOn,
             locked: locked,
-            onChanged: locked ? null : (v) => DatabaseService.instance.toggleLights(v),
+            onChanged:
+                locked ? null : (v) => DatabaseService.instance.toggleLights(v),
           ),
         ),
         const SizedBox(width: 14),
@@ -276,7 +302,8 @@ class _DashboardScreenState extends State<DashboardScreen>
             label: 'HVAC',
             active: data.hvacOn,
             locked: locked,
-            onChanged: locked ? null : (v) => DatabaseService.instance.toggleHvac(v),
+            onChanged:
+                locked ? null : (v) => DatabaseService.instance.toggleHvac(v),
           ),
         ),
       ],
@@ -298,22 +325,29 @@ class _DashboardScreenState extends State<DashboardScreen>
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: AppTheme.glassDecoration(
             radius: 18,
-            borderColor: active && !locked ? AppColors.cyan.withOpacity(0.5) : AppColors.glassBorder,
-            backgroundColor: active && !locked ? AppColors.cyan.withOpacity(0.08) : AppColors.glass,
+            borderColor: active && !locked
+                ? AppColors.cyan.withOpacity(0.5)
+                : AppColors.glassBorder,
+            backgroundColor: active && !locked
+                ? AppColors.cyan.withOpacity(0.08)
+                : AppColors.glass,
           ),
           child: Row(
             children: [
               Icon(
                 locked ? LucideIcons.lock : icon,
-                color: active && !locked ? AppColors.cyan : AppColors.textSecondary,
+                color: active && !locked
+                    ? AppColors.cyan
+                    : AppColors.textSecondary,
                 size: 20,
               ),
               const SizedBox(width: 10),
-              Expanded(child: Text(label, style: AppTheme.bodyFont(fontSize: 13))),
+              Expanded(
+                  child: Text(label, style: AppTheme.bodyFont(fontSize: 13))),
               Switch(
                 value: active,
                 onChanged: onChanged,
-                activeColor: AppColors.cyan,
+                activeThumbColor: AppColors.cyan,
                 inactiveTrackColor: AppColors.surfaceLight,
               ),
             ],

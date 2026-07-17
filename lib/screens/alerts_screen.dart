@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 
 import '../core/theme.dart';
 import '../models/telemetry.dart';
@@ -34,14 +34,20 @@ class AlertsScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Statut du bâtiment en temps réel',
-                style: AppTheme.bodyFont(fontSize: 13, color: AppColors.textSecondary),
+                style: AppTheme.bodyFont(
+                    fontSize: 13, color: AppColors.textSecondary),
               ),
               const SizedBox(height: 24),
               _buildStatusCard(),
               const SizedBox(height: 24),
-              Text('ÉVÉNEMENTS RÉCENTS', style: AppTheme.monoFont(fontSize: 12, color: AppColors.textSecondary)),
+              Text('ÉVÉNEMENTS RÉCENTS',
+                  style: AppTheme.monoFont(
+                      fontSize: 12, color: AppColors.textSecondary)),
               const SizedBox(height: 12),
-              if (events.isEmpty) _buildEmptyState() else ...events.map(_buildEventTile),
+              if (events.isEmpty)
+                _buildEmptyState()
+              else
+                ...events.map(_buildEventTile),
             ],
           ),
         );
@@ -67,7 +73,8 @@ class AlertsScreen extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(alert ? LucideIcons.alertTriangle : LucideIcons.shieldCheck, color: color, size: 28),
+              Icon(alert ? LucideIcons.alertTriangle : LucideIcons.shieldCheck,
+                  color: color, size: 28),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -84,7 +91,8 @@ class AlertsScreen extends StatelessWidget {
                           : current.co2 > co2Threshold
                               ? 'CO₂ élevé : ${current.co2.toStringAsFixed(0)} ppm'
                               : 'Aucun capteur en alerte actuellement',
-                      style: AppTheme.bodyFont(fontSize: 12, color: AppColors.textSecondary),
+                      style: AppTheme.bodyFont(
+                          fontSize: 12, color: AppColors.textSecondary),
                     ),
                   ],
                 ),
@@ -107,7 +115,8 @@ class AlertsScreen extends StatelessWidget {
           decoration: AppTheme.glassDecoration(radius: 20),
           child: Text(
             'Aucun événement enregistré pour le moment.',
-            style: AppTheme.bodyFont(fontSize: 13, color: AppColors.textSecondary),
+            style:
+                AppTheme.bodyFont(fontSize: 13, color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
         ),
@@ -136,12 +145,15 @@ class AlertsScreen extends StatelessWidget {
             decoration: AppTheme.glassDecoration(radius: 16),
             child: Row(
               children: [
-                Icon(isSmoke ? LucideIcons.flame : LucideIcons.wind, color: color, size: 18),
+                Icon(isSmoke ? LucideIcons.flame : LucideIcons.wind,
+                    color: color, size: 18),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(label, style: AppTheme.bodyFont(fontSize: 13)),
                 ),
-                Text(timeLabel, style: AppTheme.monoFont(fontSize: 11, color: AppColors.textSecondary)),
+                Text(timeLabel,
+                    style: AppTheme.monoFont(
+                        fontSize: 11, color: AppColors.textSecondary)),
               ],
             ),
           ),

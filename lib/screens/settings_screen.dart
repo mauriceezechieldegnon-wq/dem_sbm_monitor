@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 
 import '../core/theme.dart';
 import '../models/subscription.dart';
@@ -56,8 +56,7 @@ class SettingsScreen extends StatelessWidget {
             height: 50,
             child: OutlinedButton.icon(
               onPressed: () => AuthService.instance.signOut(),
-              icon: const Icon(LucideIcons.logOut,
-                  size: 18, color: AppColors.danger),
+              icon: Icon(LucideIcons.logOut, size: 18, color: AppColors.danger),
               label: Text(
                 'SE DÉCONNECTER',
                 style: AppTheme.monoFont(

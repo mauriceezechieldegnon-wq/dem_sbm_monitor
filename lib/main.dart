@@ -2,12 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons_flutter.dart';
 
-// Importations des options Firebase générées
 import 'firebase_options.dart';
-
-// Importations de ton architecture
 import 'core/theme.dart';
 import 'models/telemetry.dart';
 import 'models/subscription.dart';
@@ -15,8 +12,9 @@ import 'services/auth_service.dart';
 import 'services/database_service.dart';
 import 'services/subscription_service.dart';
 import 'services/team_service.dart';
+import 'services/alarm_manager.dart'; // IMPORT ALARME
+import 'services/simulator_service.dart'; // IMPORT SIMULATEUR
 
-// Importations des écrans
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/analytics_screen.dart';
@@ -25,78 +23,55 @@ import 'screens/settings_screen.dart';
 import 'screens/team_screen.dart';
 import 'screens/access_denied_screen.dart';
 import 'screens/splash_screen.dart';
-import 'services/simulator_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialisation de Firebase avec gestion d'erreur pour IDX/Web
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+        options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
-    debugPrint("Erreur critique Firebase Initialisation: $e");
+    debugPrint("Erreur Firebase: $e");
   }
-
   runApp(const DemSbmApp());
 }
 
 class DemSbmApp extends StatelessWidget {
   const DemSbmApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'DEM SBM Mission Control',
-      debugShowCheckedModeBanner: false, // <--- MIS SUR FALSE POUR LE LOOK PRO
+      title: 'DEM SBM',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const SplashScreen(), // <--- DÉMARRAGE SUR LE SPLASH SCREEN
+      home: const SplashScreen(),
     );
   }
 }
 
-/// Gère le flux d'entrée : Login -> Vérification Équipe -> Dashboard
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: AuthService.instance.authStateChanges,
       builder: (context, snapshot) {
-        // 1. En attente de l'état de connexion
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-              body: Center(
-                  child: CircularProgressIndicator(color: AppColors.cyan)));
+              body: Center(child: CircularProgressIndicator()));
         }
+        final user = snapshot.data;
+        if (user == null) return const LoginScreen();
 
-        final User? user = snapshot.data;
-
-        // 2. Si non connecté -> Écran Login
-        if (user == null) {
-          return const LoginScreen();
-        }
-
-        // 3. Si connecté -> Vérifier si l'utilisateur est autorisé (TeamService)
         return FutureBuilder<bool>(
           future: TeamService.instance.checkUserAccess(user.email!),
           builder: (context, accessSnapshot) {
             if (accessSnapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                  body: Center(
-                      child: CircularProgressIndicator(color: AppColors.cyan)));
+                  body: Center(child: CircularProgressIndicator()));
             }
+            if (accessSnapshot.data == false) return const AccessDeniedScreen();
 
-            // 4. Accès refusé ou utilisateur désactivé
-            if (accessSnapshot.data == false) {
-              return const AccessDeniedScreen();
-            }
-
-            // 5. Accès accordé : On prépare les données en arrière-plan
             _provisioning(user);
-
             return MissionControlScreen(uid: user.uid);
           },
         );
@@ -104,25 +79,17 @@ class AuthGate extends StatelessWidget {
     );
   }
 
-  /// Prépare les documents nécessaires sans bloquer l'interface
   void _provisioning(User user) {
-    // Créer le profil et l'abonnement par défaut
-    SubscriptionService.instance.ensureUserDocument(
-      uid: user.uid,
-      email: user.email!,
-    );
-    // S'assurer que le bâtiment a un document de télémétrie
+    SubscriptionService.instance
+        .ensureUserDocument(uid: user.uid, email: user.email!);
     DatabaseService.instance.ensureDocumentExists();
-
-    // DÉMARRAGE DU SIMULATEUR IOT
-    SimulatorService.startSimulation();
+    SimulatorService.startSimulation(); // On démarre le simulateur
   }
 }
 
 class MissionControlScreen extends StatefulWidget {
   final String uid;
   const MissionControlScreen({super.key, required this.uid});
-
   @override
   State<MissionControlScreen> createState() => _MissionControlScreenState();
 }
@@ -137,52 +104,51 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
       body: StreamBuilder<SubscriptionTier>(
         stream: SubscriptionService.instance.subscriptionStream(widget.uid),
         builder: (context, tierSnapshot) {
-          final SubscriptionTier tier =
-              tierSnapshot.data ?? SubscriptionTier.free;
+          final tier = tierSnapshot.data ?? SubscriptionTier.free;
 
           return StreamBuilder<Telemetry>(
             stream: DatabaseService.instance.telemetryStream(),
             builder: (context, snapshot) {
-              final Telemetry data = snapshot.data ?? Telemetry.empty();
-              final bool alertMode = data.smokeDetected;
-              final bool connected = snapshot.hasData;
+              final data = snapshot.data ?? Telemetry.empty();
+              final bool alertMode = data.smokeDetected || data.co2 > 1000;
 
-              // Liste complète des onglets incluant la gestion d'équipe
+              // --- LOGIQUE SONORE ---
+              if (alertMode) {
+                AlarmManager.instance.playEmergency();
+              } else {
+                AlarmManager.instance.stopAlarm();
+              }
+
               final List<Widget> tabs = [
                 DashboardScreen(
                     data: data,
-                    connected: connected,
+                    connected: snapshot.hasData,
                     alertMode: alertMode,
                     tier: tier),
                 AnalyticsScreen(tier: tier),
                 AlertsScreen(current: data),
-                const TeamScreen(), // Onglet Équipe
+                const TeamScreen(),
                 SettingsScreen(tier: tier),
               ];
 
               return Stack(
                 children: [
-                  // Fond avec halos lumineux diffus
                   _buildBackgroundGlows(alertMode),
                   SafeArea(
                     child: Column(
                       children: [
                         if (alertMode) _buildAlertBanner(),
                         Expanded(
-                          child: IndexedStack(
-                            index: _navIndex,
-                            children: tabs,
-                          ),
-                        ),
+                            child:
+                                IndexedStack(index: _navIndex, children: tabs)),
                       ],
                     ),
                   ),
                   Positioned(
-                    left: 20,
-                    right: 20,
-                    bottom: 20,
-                    child: _buildFloatingNav(),
-                  ),
+                      left: 20,
+                      right: 20,
+                      bottom: 20,
+                      child: _buildFloatingNav()),
                 ],
               );
             },
@@ -235,10 +201,10 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
       color: AppColors.dangerBright,
       child: Row(
         children: [
-          const Icon(LucideIcons.flame, color: Colors.white, size: 20),
+          Icon(LucideIcons.flame, color: Colors.white, size: 20),
           const SizedBox(width: 10),
           Expanded(
-              child: Text('ALERTE INCENDIE — FUMÉE DÉTECTÉE',
+              child: Text('ALERTE CRITIQUE - ÉVACUATION',
                   style:
                       AppTheme.displayFont(fontSize: 14, color: Colors.white))),
           TextButton(
@@ -257,10 +223,9 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
       LucideIcons.layoutDashboard,
       LucideIcons.barChart3,
       LucideIcons.bell,
-      LucideIcons.users, // Icône équipe
-      LucideIcons.settings,
+      LucideIcons.users,
+      LucideIcons.settings
     ];
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
       child: BackdropFilter(
@@ -268,10 +233,9 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
         child: Container(
           height: 66,
           decoration: BoxDecoration(
-            color: AppColors.surface.withOpacity(0.6),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: AppColors.glassBorder),
-          ),
+              color: AppColors.surface.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: AppColors.glassBorder)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(items.length, (index) {
