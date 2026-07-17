@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
+  # --- JOB ANDROID (Inchangé car il fonctionne) ---
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -16,34 +17,46 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.44.6' # Alignement sur ta version locale
-      
+          flutter-version: '3.44.6'
       - name: Build APK
         run: |
           flutter pub get
           flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: dem-sbm-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+  # --- JOB WINDOWS (Le correctif est ici) ---
   build-windows:
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
+
+      # ÉTAPE 1 : Activer les noms de fichiers longs sur Windows
+      - name: Enable Long Paths
+        run: |
+          reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
+
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           flutter-version: '3.44.6'
-      
+
       - name: Enable Windows Build
         run: flutter config --enable-windows-desktop
 
+      # ÉTAPE 2 : Déplacer le cache Pub vers un chemin très court (C:\p)
+      - name: Install dependencies with short cache path
+        run: |
+          mkdir C:\p
+          $env:PUB_CACHE="C:\p"
+          flutter pub get
+
       - name: Build Windows
         run: |
-          flutter pub get
+          $env:PUB_CACHE="C:\p"
           flutter create . --platforms=windows
           flutter build windows --release
 
