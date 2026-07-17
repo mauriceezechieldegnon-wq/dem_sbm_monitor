@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB 1 : ANDROID ---
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -17,40 +16,27 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      
-      - name: Install dependencies
-        run: flutter pub get
-
       - name: Build APK
-        # On ajoute le flag pour ignorer les warnings de version Gradle
         run: flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: dem-sbm-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
-  # --- JOB 2 : WINDOWS ---
   build-windows:
-    runs-on: windows-latest # <--- Obligatoire pour compiler un .exe
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Enable Windows Build
-        run: flutter config --enable-windows-desktop
-
       - name: Build Windows
-        run: flutter build windows --release
-
-      - name: Upload Windows Bundle
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows --release
+      - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
-          name: dem-sbm-windows-executable
+          name: dem-sbm-windows-bundle
           path: build/windows/x64/runner/Release/
