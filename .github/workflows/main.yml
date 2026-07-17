@@ -1,43 +1,15 @@
-name: Multi-Platform Build Artifacts
-
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  build-android:
-    runs-on: ubuntu-latest
+build-windows:
+    runs-on: windows-2022 # On force l'image Windows 2022
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: '3.22.2' # <--- VERSION FIGÉE ICI
       
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Install MSVC (Visual Studio 2022)
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Build APK
-        run: flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: dem-sbm-android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.22.2' # <--- VERSION FIGÉE ICI
+          flutter-version: '3.22.2'
       
       - name: Install dependencies
         run: flutter pub get
@@ -46,10 +18,12 @@ jobs:
         run: flutter config --enable-windows-desktop
 
       - name: Build Windows
-        run: flutter build windows --release
-
-      - name: Upload Windows
+        # On force CMake à utiliser le générateur récent
+        run: |
+          flutter build windows --release
+          
+      - name: Upload Windows Bundle
         uses: actions/upload-artifact@v4
         with:
-          name: dem-sbm-windows-bundle
+          name: dem-sbm-windows-executable
           path: build/windows/x64/runner/Release/
