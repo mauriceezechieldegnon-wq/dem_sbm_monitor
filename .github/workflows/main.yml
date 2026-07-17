@@ -1,11 +1,19 @@
-build-windows:
-    runs-on: windows-2022 # On force l'image Windows 2022
+name: Multi-Platform Build Artifacts
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  # --- JOB 1 : ANDROID ---
+  build-android:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install MSVC (Visual Studio 2022)
-        uses: microsoft/setup-msbuild@v2
-
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -14,14 +22,38 @@ build-windows:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Build APK
+        run: flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: dem-sbm-android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # --- JOB 2 : WINDOWS ---
+  build-windows:
+    runs-on: windows-2022 # Image GitHub avec VS 2022
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.22.2'
+
       - name: Enable Windows Build
         run: flutter config --enable-windows-desktop
 
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Build Windows
-        # On force CMake à utiliser le générateur récent
+        # LA LIGNE MAGIQUE : On régénère le dossier windows pour VS 2022
         run: |
+          flutter create . --platforms=windows
           flutter build windows --release
-          
+
       - name: Upload Windows Bundle
         uses: actions/upload-artifact@v4
         with:
