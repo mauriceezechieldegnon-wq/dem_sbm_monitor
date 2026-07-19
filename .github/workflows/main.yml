@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB ANDROID (Inchangé) ---
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.22.2'
+          flutter-version: '3.44.6'
       - name: Build APK
         run: |
           flutter pub get
@@ -28,9 +27,8 @@ jobs:
           name: dem-sbm-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
-  # --- JOB WINDOWS (Version PowerShell Native) ---
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
 
@@ -41,20 +39,20 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.22.2'
-
-      - name: Enable Windows Build
-        run: flutter config --enable-windows-desktop
+          flutter-version: '3.44.6'
 
       - name: Build Windows
         shell: pwsh
         run: |
-          # Création d'un cache court et propre
+          # On définit le cache dans un dossier court SANS slash devant
           $env:PUB_CACHE = "C:\p"
           if (!(Test-Path $env:PUB_CACHE)) { New-Item -ItemType Directory -Path $env:PUB_CACHE }
           
-          # Nettoyage et installation
+          flutter config --enable-windows-desktop
           flutter pub get
+          
+          # SUPPRESSION CRITIQUE : on force la régénération sur le serveur
+          if (Test-Path "windows") { Remove-Item -Recurse -Force windows }
           flutter create . --platforms=windows
           
           # Build final

@@ -169,15 +169,15 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
             Positioned(
                 top: -80,
                 left: -60,
-                child: _glow(glowColor.withOpacity(0.2), 260)),
+                child: _glow(glowColor.withValues(alpha:0.2), 260)),
             Positioned(
                 top: 200,
                 right: -100,
-                child: _glow(AppColors.cyanDim.withOpacity(0.15), 240)),
+                child: _glow(AppColors.cyanDim.withValues(alpha:0.15), 240)),
             Positioned(
                 bottom: -60,
                 left: 40,
-                child: _glow(glowColor.withOpacity(0.1), 220)),
+                child: _glow(glowColor.withValues(alpha:0.1), 220)),
           ],
         ),
       ),
@@ -190,7 +190,7 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
       height: size,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: RadialGradient(colors: [color, color.withOpacity(0)])),
+          gradient: RadialGradient(colors: [color, color.withValues(alpha:0)])),
     );
   }
 
@@ -233,7 +233,7 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
         child: Container(
           height: 66,
           decoration: BoxDecoration(
-              color: AppColors.surface.withOpacity(0.6),
+              color: AppColors.surface.withValues(alpha:0.6),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: AppColors.glassBorder)),
           child: Row(
@@ -247,7 +247,7 @@ class _MissionControlScreenState extends State<MissionControlScreen> {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                       color: selected
-                          ? AppColors.cyan.withOpacity(0.15)
+                          ? AppColors.cyan.withValues(alpha:0.15)
                           : Colors.transparent,
                       shape: BoxShape.circle),
                   child: Icon(items[index],

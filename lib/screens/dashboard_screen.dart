@@ -113,13 +113,13 @@ class _DashboardScreenState extends State<DashboardScreen>
               color: (widget.alertMode
                       ? AppColors.dangerBright
                       : AppColors.success)
-                  .withOpacity(0.12),
+                  .withValues(alpha:0.12),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: (widget.alertMode
                         ? AppColors.dangerBright
                         : AppColors.success)
-                    .withOpacity(0.4),
+                    .withValues(alpha:0.4),
               ),
             ),
             child: Row(
@@ -260,8 +260,8 @@ class _DashboardScreenState extends State<DashboardScreen>
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: AppTheme.glassDecoration(
             radius: 16,
-            borderColor: AppColors.warning.withOpacity(0.4),
-            backgroundColor: AppColors.warning.withOpacity(0.08),
+            borderColor: AppColors.warning.withValues(alpha:0.4),
+            backgroundColor: AppColors.warning.withValues(alpha:0.08),
           ),
           child: Row(
             children: [
@@ -326,10 +326,10 @@ class _DashboardScreenState extends State<DashboardScreen>
           decoration: AppTheme.glassDecoration(
             radius: 18,
             borderColor: active && !locked
-                ? AppColors.cyan.withOpacity(0.5)
+                ? AppColors.cyan.withValues(alpha:0.5)
                 : AppColors.glassBorder,
             backgroundColor: active && !locked
-                ? AppColors.cyan.withOpacity(0.08)
+                ? AppColors.cyan.withValues(alpha:0.08)
                 : AppColors.glass,
           ),
           child: Row(

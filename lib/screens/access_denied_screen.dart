@@ -24,7 +24,7 @@ class AccessDeniedScreen extends StatelessWidget {
                     width: 250,
                     height: 250,
                     decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(0.15),
+                        color: AppColors.danger.withValues(alpha:0.15),
                         shape: BoxShape.circle),
                     child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),

@@ -115,12 +115,12 @@ class _LoginScreenState extends State<LoginScreen> {
             Positioned(
               top: -100,
               left: -80,
-              child: _glow(AppColors.cyan.withOpacity(0.22), 280),
+              child: _glow(AppColors.cyan.withValues(alpha:0.22), 280),
             ),
             Positioned(
               bottom: -80,
               right: -60,
-              child: _glow(AppColors.cyanDim.withOpacity(0.2), 260),
+              child: _glow(AppColors.cyanDim.withValues(alpha:0.2), 260),
             ),
           ],
         ),
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: RadialGradient(colors: [color, color.withOpacity(0)]),
+        gradient: RadialGradient(colors: [color, color.withValues(alpha:0)]),
       ),
     );
   }
@@ -146,9 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 64,
           height: 64,
           decoration: BoxDecoration(
-            color: AppColors.cyan.withOpacity(0.12),
+            color: AppColors.cyan.withValues(alpha:0.12),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.cyan.withOpacity(0.4)),
+            border: Border.all(color: AppColors.cyan.withValues(alpha:0.4)),
           ),
           child: Icon(LucideIcons.building, color: AppColors.cyan, size: 30),
         ),
@@ -224,10 +224,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: AppColors.danger.withOpacity(0.1),
+                      color: AppColors.danger.withValues(alpha:0.1),
                       borderRadius: BorderRadius.circular(10),
                       border:
-                          Border.all(color: AppColors.danger.withOpacity(0.4)),
+                          Border.all(color: AppColors.danger.withValues(alpha:0.4)),
                     ),
                     child: Row(
                       children: [
@@ -336,7 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
         prefixIcon: Icon(icon, color: AppColors.textSecondary, size: 18),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: AppColors.surfaceLight.withOpacity(0.4),
+        fillColor: AppColors.surfaceLight.withValues(alpha:0.4),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: AppColors.glassBorder),

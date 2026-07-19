@@ -23,8 +23,8 @@ class AppColors {
   static const Color textSecondary = Color(0xFF7C93A8);
 
   // Glassmorphism
-  static Color glass = Colors.white.withOpacity(0.04);
-  static Color glassBorder = Colors.white.withOpacity(0.08);
+  static Color glass = Colors.white.withValues(alpha:0.04);
+  static Color glassBorder = Colors.white.withValues(alpha:0.08);
 }
 
 class AppTheme {
@@ -85,7 +85,7 @@ class AppTheme {
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
       ),
-      splashColor: AppColors.cyan.withOpacity(0.1),
+      splashColor: AppColors.cyan.withValues(alpha:0.1),
       highlightColor: Colors.transparent,
     );
   }
@@ -102,7 +102,7 @@ class AppTheme {
       border: Border.all(color: borderColor ?? AppColors.glassBorder, width: 1),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.35),
+          color: Colors.black.withValues(alpha:0.35),
           blurRadius: 24,
           offset: const Offset(0, 12),
         ),

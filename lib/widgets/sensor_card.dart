@@ -36,10 +36,10 @@ class SensorCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: AppTheme.glassDecoration(
             borderColor: isAlert
-                ? AppColors.dangerBright.withOpacity(0.6)
+                ? AppColors.dangerBright.withValues(alpha:0.6)
                 : AppColors.glassBorder,
             backgroundColor: isAlert
-                ? AppColors.dangerBright.withOpacity(0.08)
+                ? AppColors.dangerBright.withValues(alpha:0.08)
                 : AppColors.glass,
           ),
           child: Column(
@@ -51,7 +51,7 @@ class SensorCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: accent.withOpacity(0.12),
+                      color: accent.withValues(alpha:0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(icon, color: accent, size: 20),

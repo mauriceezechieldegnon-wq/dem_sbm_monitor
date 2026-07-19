@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 200,
               height: 200,
               decoration: BoxDecoration(
-                color: AppColors.cyan.withOpacity(0.05),
+                color: AppColors.cyan.withValues(alpha:0.05),
                 shape: BoxShape.circle,
               ),
             ),
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.cyan.withOpacity(0.3)),
+                    border: Border.all(color: AppColors.cyan.withValues(alpha:0.3)),
                   ),
                   child:
                       const Icon(Icons.bolt, color: AppColors.cyan, size: 50),
@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Text(
                   "DEM Electrical Engineering",
                   style: GoogleFonts.shareTechMono(
-                    color: AppColors.cyan.withOpacity(0.7),
+                    color: AppColors.cyan.withValues(alpha:0.7),
                     fontSize: 10,
                   ),
                 ),
@@ -111,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Text(
                   "Copyright © Aout 2026 · Tous droits réservés",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha:0.3),
                     fontSize: 9,
                   ),
                 ),

@@ -68,8 +68,8 @@ class AlertsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: AppTheme.glassDecoration(
             radius: 24,
-            borderColor: color.withOpacity(0.4),
-            backgroundColor: color.withOpacity(0.08),
+            borderColor: color.withValues(alpha:0.4),
+            backgroundColor: color.withValues(alpha:0.08),
           ),
           child: Row(
             children: [

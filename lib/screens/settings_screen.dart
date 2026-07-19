@@ -65,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
                     fontSize: 13),
               ),
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: AppColors.danger.withOpacity(0.5)),
+                side: BorderSide(color: AppColors.danger.withValues(alpha:0.5)),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
               ),
@@ -91,8 +91,8 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: AppTheme.glassDecoration(
             radius: 18,
-            borderColor: tierColor.withOpacity(0.4),
-            backgroundColor: tierColor.withOpacity(0.06),
+            borderColor: tierColor.withValues(alpha:0.4),
+            backgroundColor: tierColor.withValues(alpha:0.06),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: tierColor.withOpacity(0.15),
+                      color: tierColor.withValues(alpha:0.15),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(LucideIcons.crown, color: tierColor, size: 18),
@@ -194,7 +194,7 @@ class SettingsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.cyan.withOpacity(0.12),
+                  color: AppColors.cyan.withValues(alpha:0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: AppColors.cyan, size: 18),
