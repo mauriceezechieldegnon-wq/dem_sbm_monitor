@@ -4,10 +4,8 @@ on:
   push:
     branches: [ "main" ]
 
-env:
-  FLUTTER_VERSION: '3.44.6'
-
 jobs:
+  # --- JOB ANDROID (Inchangé) ---
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +17,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: '3.22.2'
       - name: Build APK
         run: |
           flutter pub get
@@ -30,6 +28,7 @@ jobs:
           name: dem-sbm-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+  # --- JOB WINDOWS (Version PowerShell Native) ---
   build-windows:
     runs-on: windows-latest
     steps:
@@ -42,22 +41,25 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: '3.22.2'
 
-      - name: Enable Windows Desktop
+      - name: Enable Windows Build
         run: flutter config --enable-windows-desktop
 
       - name: Build Windows
-        shell: bash # On utilise Bash pour éviter les erreurs de disque C:
+        shell: pwsh
         run: |
-          # On définit un cache court à la racine du runner
-          export PUB_CACHE="C:\\p"
-          mkdir -p $PUB_CACHE
+          # Création d'un cache court et propre
+          $env:PUB_CACHE = "C:\p"
+          if (!(Test-Path $env:PUB_CACHE)) { New-Item -ItemType Directory -Path $env:PUB_CACHE }
           
+          # Nettoyage et installation
           flutter pub get
           flutter create . --platforms=windows
-          flutter build windows --release --no-tree-shake-icons
           
+          # Build final
+          flutter build windows --release --no-tree-shake-icons
+        
       - name: Upload Windows Bundle
         uses: actions/upload-artifact@v4
         with:
