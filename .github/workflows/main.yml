@@ -4,8 +4,10 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  FLUTTER_VERSION: '3.44.6'
+
 jobs:
-  # --- JOB ANDROID (Inchangé car il fonctionne) ---
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +19,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.44.6'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
       - name: Build APK
         run: |
           flutter pub get
@@ -28,38 +30,34 @@ jobs:
           name: dem-sbm-android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
-  # --- JOB WINDOWS (Le correctif est ici) ---
   build-windows:
-    runs-on: windows-2022
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      # ÉTAPE 1 : Activer les noms de fichiers longs sur Windows
       - name: Enable Long Paths
-        run: |
-          reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
+        run: reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
+        shell: powershell
 
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.44.6'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Enable Windows Build
+      - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
 
-      # ÉTAPE 2 : Déplacer le cache Pub vers un chemin très court (C:\p)
-      - name: Install dependencies with short cache path
-        run: |
-          mkdir C:\p
-          $env:PUB_CACHE="C:\p"
-          flutter pub get
-
       - name: Build Windows
+        shell: bash # On utilise Bash pour éviter les erreurs de disque C:
         run: |
-          $env:PUB_CACHE="C:\p"
+          # On définit un cache court à la racine du runner
+          export PUB_CACHE="C:\\p"
+          mkdir -p $PUB_CACHE
+          
+          flutter pub get
           flutter create . --platforms=windows
-          flutter build windows --release
-
+          flutter build windows --release --no-tree-shake-icons
+          
       - name: Upload Windows Bundle
         uses: actions/upload-artifact@v4
         with:
