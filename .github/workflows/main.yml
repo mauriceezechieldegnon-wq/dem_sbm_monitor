@@ -21,7 +21,6 @@ jobs:
         with:
           channel: 'stable'
 
-      # 🪟 Régénère automatiquement Android ET Windows s'ils sont manquants
       - name: Enable Windows Desktop and Recreate Platforms
         run: |
           flutter config --enable-windows-desktop
@@ -33,7 +32,6 @@ jobs:
       - name: Build Windows Executable
         run: flutter build windows --release
 
-      # 📦 Export du fichier ZIP Windows (.exe)
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -57,9 +55,14 @@ jobs:
         with:
           channel: 'stable'
 
-      # 🤖 Régénère automatiquement Android ET Windows s'ils sont manquants
       - name: Recreate Platforms
         run: flutter create . --platforms=android,windows
+
+      # 🔧 Force compileSdk à 34 automatiquement sur le serveur
+      - name: Upgrade compileSdk to 34
+        run: |
+          sed -i 's/compileSdk .*/compileSdk 34/g' android/app/build.gradle
+          sed -i 's/compileSdkVersion .*/compileSdkVersion 34/g' android/app/build.gradle
 
       - name: Install Dependencies
         run: flutter pub get
@@ -67,7 +70,6 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release --android-skip-build-dependency-validation
 
-      # 📦 Export de l'APK Android
       - name: Upload Android APK Artifact
         uses: actions/upload-artifact@v4
         with:
