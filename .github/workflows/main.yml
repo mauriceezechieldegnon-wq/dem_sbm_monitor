@@ -21,10 +21,11 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Enable Windows Desktop and Recreate Files
+      # 🪟 Régénère automatiquement Android ET Windows s'ils sont manquants
+      - name: Enable Windows Desktop and Recreate Platforms
         run: |
           flutter config --enable-windows-desktop
-          flutter create . --platforms=windows
+          flutter create . --platforms=android,windows
 
       - name: Install Dependencies
         run: flutter pub get
@@ -32,11 +33,11 @@ jobs:
       - name: Build Windows Executable
         run: flutter build windows --release
 
-      # 📦 Exportation de l'application Windows (.exe + DLLs)
+      # 📦 Export du fichier ZIP Windows (.exe)
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-app-release
+          name: windows-release-app
           path: build/windows/x64/runner/Release/
 
   build-android:
@@ -56,15 +57,19 @@ jobs:
         with:
           channel: 'stable'
 
+      # 🤖 Régénère automatiquement Android ET Windows s'ils sont manquants
+      - name: Recreate Platforms
+        run: flutter create . --platforms=android,windows
+
       - name: Install Dependencies
         run: flutter pub get
 
       - name: Build Android APK
         run: flutter build apk --release --android-skip-build-dependency-validation
 
-      # 📦 Exportation du fichier APK Android
+      # 📦 Export de l'APK Android
       - name: Upload Android APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk-release
+          name: android-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
